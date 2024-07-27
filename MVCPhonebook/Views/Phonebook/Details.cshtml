@@ -1,0 +1,18 @@
+﻿@model Contact
+
+<h1>Contacts Details</h1>
+<hr />
+<div>
+    <p>First Name: @Model.FirstName</p>
+    <p>Last Name: @Model.LastName</p>
+    <p>Contact Number: @Model.ContactNumber</p>
+    <p>Email: @Model.Email</p>
+    <p>Company Name: @Model.Company</p>
+
+</div>
+<hr />
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.ContactId">Edit</a> | 
+    <a asp-action="Delete" asp-route-id="@Model.ContactId">Delete</a>
+
+</p>

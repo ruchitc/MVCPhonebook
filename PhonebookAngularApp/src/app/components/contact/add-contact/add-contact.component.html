@@ -1,0 +1,126 @@
+<div>
+    <div *ngIf="loading" class="loader-overlay">
+        <img src="assets/loaderImage.gif"  class="loader-overlay" alt="loading" />
+    </div>
+    <div class="row justify-content-center container">
+        <h2 class="row justify-content-center">Add Contact</h2>
+        <div class="col-md-6 form-wrapper">
+            <form #addContactForm="ngForm" class="need-validation" (ngSubmit)="onSubmit(addContactForm)" novalidate>
+                <div class="row mb-3">
+                <div class="col md-6">
+                    <label class="form-label" for="name">First name</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" [(ngModel)]="contact.firstName" required
+                        minlength="3">
+                    <div *ngIf="addContactForm.controls['firstName']?.invalid && addContactForm.controls['firstName']?.touched">
+                        <small class="text-danger" *ngIf="addContactForm.controls['firstName']?.errors?.['required']">First name is
+                            required.</small>
+                        <small class="text-danger" *ngIf="addContactForm.controls['firstName']?.errors?.['minlength']">
+                            First name must be at least 3 characters long.
+                        </small>
+                    </div>
+                </div>
+                <div class="col md-6">
+                    <label class="form-label" for="name">Last name</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" [(ngModel)]="contact.lastName" required
+                        minlength="3">
+                    <div *ngIf="addContactForm.controls['lastName']?.invalid && addContactForm.controls['lastName']?.touched">
+                        <small class="text-danger" *ngIf="addContactForm.controls['lastName']?.errors?.['required']">Last name is
+                            required.</small>
+                        <small class="text-danger" *ngIf="addContactForm.controls['firstName']?.errors?.['minlength']">
+                            Last name must be at least 3 characters long.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            
+                
+                <div class="mb-3">
+                    <label class="form-label" for="name">Contact number</label>
+                    <input type="number" class="form-control" id="contactNumber" name="contactNumber" [(ngModel)]="contact.contactNumber" required
+                        pattern="[0-9]{10}">
+                    <div *ngIf="addContactForm.controls['contactNumber']?.invalid && addContactForm.controls['contactNumber']?.touched">
+                        <small class="text-danger" *ngIf="addContactForm.controls['contactNumber']?.errors?.['required']">
+                            Contact number is required.
+                        </small>
+                        <small class="text-danger" 
+                        *ngIf="addContactForm.controls['contactNumber']?.errors?.['pattern']">
+                            Invalid contact number format.
+                        </small>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="name">Email</label>
+                    <input type="text" class="form-control" id="email" name="email" [(ngModel)]="contact.email"
+                    pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+                    maxlength="50">
+                    <div *ngIf="addContactForm.controls['email']?.invalid && addContactForm.controls['email']?.touched">
+                        <small class="text-danger" *ngIf="addContactForm.controls['email']?.errors?.['pattern']">
+                            Invalid email format.
+                        </small>
+                        <small class="text-danger" *ngIf="addContactForm.controls['email']?.errors?.['maxlength']">
+                            Email cannot be longer than 50 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="name">Company name</label>
+                    <input type="text" class="form-control" id="company" name="company" [(ngModel)]="contact.company"
+                        maxlength="50">
+                    <div *ngIf="addContactForm.controls['company']?.invalid && addContactForm.controls['company']?.touched">
+                        <small class="text-danger" *ngIf="addContactForm.controls['company']?.errors?.['maxlength']">
+                            Company name cannot be longer than 50 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col md-6">
+                        <label class="form-label" for="countryId">Country</label>
+                        <select (change)="loadStatesByCountryId(contact.countryId)" id="countryId" name="countryId" class="form-control" [(ngModel)]="contact.countryId" required>
+                            <option [value]=0 selected="true" disabled="disabled">-- Select country --</option>
+                            <option *ngFor="let country of countries" [value]=country.countryId>{{country.countryName}}</option>
+                        </select>
+                        <div *ngIf="(addContactForm.controls['countryId']?.invalid || addContactForm.controls['countryId']?.value == 0) && addContactForm.controls['countryId']?.touched">
+                            <small class="text-danger">Country is required.</small>
+                        </div>
+                    </div>
+                    <div class="col md-6">
+                        <label class="form-label" for="stateId">State</label>
+                        <select id="stateId" name="stateId" class="form-control" [(ngModel)]="contact.stateId" required>
+                            <option [value]=0 selected="true" disabled="disabled">-- Select state --</option>
+                            <option *ngFor="let state of states" [value]=state.stateId>{{state.stateName}}</option>
+                        </select>
+                        <div *ngIf="(addContactForm.controls['stateId']?.invalid || addContactForm.controls['stateId']?.value == 0) && addContactForm.controls['stateId']?.touched">
+                            <small class="text-danger">State is required.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Gender</label>
+                    <div>
+                        <input type="radio" id="genderMale" name="gender" value="M" [(ngModel)]="contact.gender" required>
+                        <label class="form-label" for="genderMale">Male</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="genderFemale" name="gender" value="F" [(ngModel)]="contact.gender" required>
+                        <label class="form-label" for="genderFemale">Female</label>
+                    </div>
+                    <div *ngIf="addContactForm.controls['gender']?.invalid && addContactForm.controls['gender']?.touched">
+                        <small class="text-danger">Gender field is required.</small>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <input type="checkbox" id="isFavourite" name="isFavourite" [(ngModel)]="contact.isFavourite">
+                    <label for="isFavourite" class="form-label">Add to favourites </label>
+                </div>
+                <div class="mb-3">
+                    <label for="fileToUpload">Image</label>
+                    <input type="file" (change)="handleFileInput($event)" id="fileToUpload" name="fileToUpload" accept="image/png, image/gif, image/jpeg" class="form-control" />
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary" [disabled]="addContactForm.invalid">Submit</button>
+                    <a [routerLink]="['/contacts']" routerLinkActive="router-link-active">Back to list</a> 
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

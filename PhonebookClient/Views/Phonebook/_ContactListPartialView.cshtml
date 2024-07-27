@@ -1,0 +1,57 @@
+﻿@using PhonebookClient.ViewModels
+@model List<ContactViewModel>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th id="firstNameHeader" style="cursor: pointer">Name</th>
+            <th>Contact number</th>
+            <th>Email</th>
+            <th>Company name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var contact in Model)
+        {   
+                
+            <tr class="employee-item" data-href="@Url.Action("Details", "Phonebook", new {id = contact.ContactId})">
+                <td>
+                    @if (contact.IsFavourite)
+                    {
+                        <i class="table-row-star fa fa-star"></i>
+                    }
+                    else
+                    {
+                        <i class="table-row-star fa-regular fa-star"></i>
+                    }
+                </td>
+                @if(contact.ImageBytes != null)
+                {
+                    var base64 = Convert.ToBase64String(contact.ImageBytes);
+                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                    <td>
+                        <img src="@imgSrc" alt="Image" width="100" height="80" />
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <img src="@Url.Content("~/Uploads/"+"default-image.png")" alt="Image" width="100" height="80" />
+                    </td>
+                }
+
+                <td>@contact.FirstName @contact.LastName</td>
+                <td>@contact.ContactNumber</td>
+                <td>@contact.Email</td>
+                <td>@contact.Company</td>
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@contact.ContactId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@contact.ContactId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

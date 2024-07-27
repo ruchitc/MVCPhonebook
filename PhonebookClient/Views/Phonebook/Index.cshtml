@@ -1,0 +1,181 @@
+﻿@using PhonebookClient.ViewModels
+@model List<ContactViewModel>
+
+<input type="search" id="searchbox" name="searchbox" placeholder="Search contact" onsearch="changePage(1, @ViewBag.PageSize, this.value, '@ViewBag.SortDir', '@ViewBag.ShowFavourites')" />
+<h1>Contacts</h1>
+
+<br />
+<!-- Character filter -->
+<form method="get">
+<div class="filter">
+    <a onclick="changePage(1, @ViewBag.PageSize, '@ViewBag.SearchString', '@ViewBag.SortDir', '!@ViewBag.ShowFavourites')"
+           class="btn btn-outline-secondary @(ViewBag.ShowFavourites == true ? "active" : "")">
+        Show Favourites
+    </a>
+
+    <a onclick="changePage(1, @ViewBag.PageSize, '', '@ViewBag.SortDir', '@ViewBag.ShowFavourites')"
+           class="btn btn-outline-secondary @(ViewBag.SearchString == "" ? "active" : "")">
+        All
+    </a>
+
+    @for (char ch = 'A'; ch <= 'Z'; ch++)
+    {
+        <a onclick="changePage(1, @ViewBag.PageSize, '@ch', '@ViewBag.SortDir', '@ViewBag.ShowFavourites')"
+               class="btn btn-outline-secondary @(ViewBag.SearchString.StartsWith(@ch) ? "active": "")">
+            @ch
+        </a>
+    }
+</div>
+</form>
+<br />
+
+@Html.Partial("_ContactListPartialView")
+
+<br />
+<!-- Pagination -->
+<div class="page-size-element">
+    <!-- Page size dropdown -->
+    <label for="pageSize">Page Size:</label>
+    <select id="pageSize" value="@ViewBag.PageSize" onchange="changePage(1, this.value, '@ViewBag.SearchString', '@ViewBag.SortDir', '@ViewBag.ShowFavourites')">
+        <option value="2">2</option>
+        <option value="4">4</option>
+        <option value="6">6</option>
+        <option value="6">8</option>
+        <option value="6">10</option>
+        <!-- Add more options as needed -->
+    </select>
+</div>
+
+    <br />
+    <ul class="pagination">
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.Page ? "active" : "")">
+                <a onclick="changePage(@i, @ViewBag.PageSize, '@ViewBag.SearchString', '@ViewBag.SortDir', '@ViewBag.ShowFavourites')"
+                    class="page-link">
+                    @i
+                </a>
+            </li>
+        }
+    </ul>
+<br />
+
+<a class="btn btn-primary" asp-action="Create">Add Contact</a>
+
+<style>
+    #searchbox {
+        float: right;
+        margin-top: 8px;
+        height: 40px;
+        width: 250px;
+        padding-inline: 14px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        border-radius: 4px;
+    }
+
+    .filter {
+        max-width: fit-content;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    tbody {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    thead {
+        text-align: center;
+    }
+
+    .employee-item:hover {
+        filter: brightness(85%);
+        cursor: pointer;
+    }
+
+    .page-size-element {
+        float: right;
+    }
+
+    .pagination {
+        justify-content: center;
+    }
+
+    .table-row-star {
+        margin-left: 20px;
+        color: gold;
+    }
+
+    .fa-star {
+        display: inline;
+        cursor: pointer;
+    }
+
+    .fa-regular {
+        color: black;
+    }
+
+    .fa-star:hover {
+        color: rgb(255, 241, 87);
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var currentPageSize = @(ViewBag.PageSize); // Get current page size from ViewBag
+        var pageSizeDropdown = document.getElementById("pageSize");
+        // Set selected option based on current page size
+        for (var i = 0; i < pageSizeDropdown.options.length; i++) {
+            if (pageSizeDropdown.options[i].value === currentPageSize.toString()) {
+                pageSizeDropdown.selectedIndex = i;
+                break;
+            }
+        }
+
+        var rows = document.querySelectorAll('tr[data-href]');
+        rows.forEach(function (row) {
+            row.addEventListener('click', function () {
+                window.location.href = row.getAttribute('data-href');
+            });
+        });
+    });
+
+    document.getElementById("firstNameHeader").addEventListener("click", function ChangeSortDirection() {
+        var sortDir = "@ViewBag.SortDir";
+        console.log(sortDir);
+        if (sortDir == 'default') {
+            var sortDir = 'asc';
+        }
+        else if (sortDir == 'asc') {
+            sortDir = 'desc';
+        }
+        else if (sortDir = 'desc') {
+            sortDir = 'default';
+        }
+
+        changePage(@ViewBag.Page, @ViewBag.PageSize, '@ViewBag.SearchString', sortDir, '@ViewBag.ShowFavourites');
+    })
+
+    function changePage(page, pageSize, searchString, sortDir, showFavourites) {
+        if(showFavourites == '!False') {
+            showFavourites = true;
+        }
+        if (showFavourites == '!True') {
+            showFavourites = false;
+        }
+
+        console.log(showFavourites);
+        window.location.href = "/Phonebook/Index" +
+            "?page=" + page +
+            "&pageSize=" + pageSize +
+            "&searchString=" + searchString +
+            "&sortDir=" + sortDir +
+            "&showFavourites=" + showFavourites;
+    }
+    // function changePageSize(select) {
+    //     var pageSize = select.value;
+    //     var currentPage = @(ViewBag.CurrentPage);
+    //     window.location.href = "/Phonebook/Index?Fav=@ViewBag.Fav&ch=@ViewBag.Ch" + "&page=" + 1 + "&pageSize=" + pageSize;
+    // }
+</script>

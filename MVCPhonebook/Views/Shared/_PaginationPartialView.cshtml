@@ -1,0 +1,22 @@
+﻿<br />
+<!-- Pagination -->
+<div>
+    <!-- Page size dropdown -->
+    <label for="pageSize">Page Size:</label>
+    <select id="pageSize" onchange="changePageSize(this)">
+        <option value="2">2</option>
+        <option value="4">4</option>
+        <option value="6">6</option>
+        <!-- Add more options as needed -->
+    </select>
+    <br />
+    <ul class="pagination">
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.Page ? "active" : "")">
+                <a class="page-link" href="/Phonebook/Index?page=@i&pageSize=@ViewBag.PageSize">@i</a>
+            </li>
+        }
+    </ul>
+</div>
+<br />

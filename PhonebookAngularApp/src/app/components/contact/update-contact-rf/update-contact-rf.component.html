@@ -1,0 +1,127 @@
+<div class="container">
+    <div class="row justify-content-center container">
+        <h2 class="row justify-content-center">Update Contact</h2>
+        <div class="col-md-6 form-wrapper">
+            <form [formGroup]="updateContactForm" (ngSubmit)="onSubmit()">
+                <div class="row mb-3">
+                    <div class="col md-6">
+                        <label for="firstName" class="form-label">First name:</label>
+                        <input type="text" class="form-control" id="firstName" formControlName="firstName">
+                        <div *ngIf="formControls['firstName'].invalid && formControls['firstName'].touched">
+                            <small class="text-danger" *ngIf="formControls['firstName'].errors?.['required']">
+                                First name is required.
+                            </small>
+                            <small class="text-danger" *ngIf="formControls['firstName'].errors?.['minlength']">
+                                First name must be atleast 3 characters long.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col md-6">
+                        <label for="lastName" class="form-label">Last name:</label>
+                        <input type="text" class="form-control" id="lastName" formControlName="lastName">
+                        <div *ngIf="formControls['lastName'].invalid && formControls['lastName'].touched">
+                            <small class="text-danger" *ngIf="formControls['lastName'].errors?.['required']">
+                                Last name is required.
+                            </small>
+                            <small class="text-danger" *ngIf="formControls['lastName'].errors?.['minlength']">
+                                Last name must be atleast 3 characters long.
+                            </small>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="mb-3">
+                    <label for="contactNumber" class="form-label">Contact number:</label>
+                    <input type="text" class="form-control" id="contactNumber" formControlName="contactNumber">
+                    <div *ngIf="formControls['contactNumber'].invalid && formControls['contactNumber'].touched">
+                        <small class="text-danger" *ngIf="formControls['contactNumber'].errors?.['required']">
+                            Contact number is required.
+                        </small>
+                        <small class="text-danger" *ngIf="formControls['contactNumber'].errors?.['pattern']">
+                            Invalid contact number format.
+                        </small>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="text" class="form-control" id="email" formControlName="email">
+                    <div *ngIf="formControls['email'].invalid && formControls['email'].touched">
+                        <small class="text-danger" *ngIf="formControls['email'].errors?.['required']">
+                            Email is required.
+                        </small>
+                        <small class="text-danger" *ngIf="formControls['email'].errors?.['pattern']">
+                            Invalid email format.
+                        </small>
+                        <small class="text-danger" *ngIf="formControls['email'].errors?.['maxlength']">
+                            Email can be atmost 50 characters long.
+                        </small>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="companyName" class="form-label">Company name:</label>
+                    <input type="text" class="form-control" id="email" formControlName="companyName">
+                    <div *ngIf="formControls['companyName'].invalid && formControls['companyName'].touched">
+                        <small class="text-danger" *ngIf="formControls['companyName'].errors?.['maxlength']">
+                            Company name can be atmost 50 characters long.
+                        </small>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col md-6">
+                        <label for="countryId" class="form-label">Country:</label>
+                        <select (change)="loadStatesByCountryId(updateContactForm.get('countryId')?.value)" class="form-control" id="countryId" formControlName="countryId">
+                            <option [value]=0>-- Select Country --</option>
+                            <option *ngFor="let country of countries" [value]=country.countryId>{{country.countryName}}</option>
+                        </select>
+                        <div *ngIf="formControls['countryId'].invalid && formControls['countryId'].touched">
+                            <small class="text-danger" *ngIf="formControls['countryId'].errors?.['invalidCountry']">
+                                Country is required.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col md-6">
+                        <label for="stateId" class="form-label">State:</label>
+                        <select class="form-control" id="stateId" formControlName="stateId">
+                            <option [value]=0>-- Select State --</option>
+                            <option *ngFor="let state of states" [value]=state.stateId>{{state.stateName}}</option>
+                        </select>
+                        <div *ngIf="formControls['stateId'].invalid && formControls['stateId'].touched">
+                            <small class="text-danger" *ngIf="formControls['stateId'].errors?.['invalidState']">
+                                State is required.
+                            </small>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="mb-3">
+                    <label for="gender" class="form-label">Gender:</label>
+                    <div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check" id="genderMale" value="M" formControlName="gender">
+                            <label for="genderMale" class="form-label">Male</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check" id="genderFemale" value="F" formControlName="gender">
+                            <label for="genderFemale" class="form-label">Female</label>
+                        </div>
+                        <div *ngIf="formControls['gender'].invalid && formControls['gender'].touched">
+                            <small class="text-danger" *ngIf="formControls['gender'].errors?.['required']">
+                                Gender field is required.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <input type="checkbox" class="form-check-input" id="isFavourite" formControlName="isFavourite">
+                    <label style="margin-left: 5px;" for="isFavourite" class="form-label">Add to favourites</label>
+                </div>
+                <div class="mb-3">
+                    <label for="fileToUpload"></label>
+                    <input type="file" (change)="handleFileInput($event)" id="fileToUpload" name="fileToUpload" accept="image/png, image/gif, image/jpeg" formControlName="fileToUpload" />
+                </div>
+                <button type="submit" class="btn btn-primary" [disabled]="updateContactForm.invalid">Submit</button>
+                <a style="margin-top: 10px;" [routerLink]="['/contacts']" routerLinkActive="router-link-active" >Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,131 @@
+<input 
+    type="search" 
+    id="searchbox" name="searchbox" 
+    placeholder="Search contact" 
+    (keyup)="loadContacts(1, searchString, sortDir, showFavourites)" 
+    (search)="loadContacts(1, searchString, sortDir, showFavourites)" 
+    [(ngModel)]="searchString"> 
+    
+<h1>Contacts</h1>
+<hr>
+<div *ngIf="loading">
+    <img src="assets/loaderImage.gif" alt="loading...">
+</div>
+
+<div class="filter">
+    <a 
+        (click)="loadContacts(1, searchString, sortDir, !showFavourites)" 
+        [class.active] = "showFavourites === true" 
+        class="btn btn-outline-secondary">
+        <i class="fa-solid fa-star fa-2xs"></i> 
+        Show Favourites
+    </a>
+    <a 
+        (click)="loadContacts(1, '', sortDir, showFavourites)" 
+        [class.active] = "searchString === ''" 
+        class="btn btn-outline-secondary">
+        All
+    </a>
+    <a *ngFor="let ch of searchArray" 
+        (click)="loadContacts(1, ch, sortDir, showFavourites)" 
+        [class.active] = "searchString === ch" 
+        class="btn btn-outline-secondary">
+        {{ ch }}
+    </a>
+</div>
+<br>
+<table class="table table-striped" *ngIf="!loading">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th (click)="sortColumn()">
+                Name
+                <i *ngIf="sortDir == 'default'" class="fa fa-sort"></i>
+                <i *ngIf="sortDir == 'asc'" class="fa fa-sort-asc"></i>
+                <i *ngIf="sortDir == 'desc'" class="fa fa-sort-desc"></i>
+            </th>
+            <th>
+                Contact number
+            </th>
+            <th>
+                Email address
+            </th>
+            <th>
+                Company name
+            </th>
+            <th *ngIf="isAuthenticated">
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+            
+            <tr *ngIf="!loading && (!contacts || contacts == null)">
+                <td colspan="7">No contacts found</td>
+            </tr>
+            <tr class="employee-item" *ngFor="let contact of contacts" routerLinkActive="router-link-active" >
+
+                <td>
+                    <i *ngIf="contact.isFavourite" class="table-row-star fa-solid fa-star fa-lg" (click)="changeFavouriteStatus(contact.contactId)"></i>
+                    <i *ngIf="!contact.isFavourite" class="table-row-star fa-regular fa-star fa-lg" (click)="changeFavouriteStatus(contact.contactId)"></i>
+                </td>
+                
+                <td [routerLink]="['/contacts/details/', contact.contactId]" routerLinkActive="router-link-active" >
+                    <img src="assets/default-image.png" *ngIf="contact.imageBytes == null" alt="Image" width="100" height="80" />
+                    <img [src]="'data:image/jpeg;base64,' + contact.imageBytes" *ngIf="contact.imageBytes != null" alt="Image" width="100" height="80" />
+                </td>
+
+                <td [routerLink]="['/contacts/details/', contact.contactId]" routerLinkActive="router-link-active" >
+                    {{ contact.firstName + ' ' + contact.lastName}}
+                </td>
+                <td [routerLink]="['/contacts/details/', contact.contactId]" routerLinkActive="router-link-active" >
+                    {{ contact.contactNumber }}
+                </td>
+                <td *ngIf="contact.email != null" [routerLink]="['/contacts/details/', contact.contactId]" routerLinkActive="router-link-active" >
+                    {{ contact.email }}
+                </td>
+                <td *ngIf="contact.email == null" [routerLink]="['/contacts/details/', contact.contactId]" routerLinkActive="router-link-active" >
+                    -
+                </td>
+                <td *ngIf="contact.company != null" [routerLink]="['/contacts/details/', contact.contactId]" routerLinkActive="router-link-active" >
+                    {{ contact.company }}
+                </td>
+                <td *ngIf="contact.company == null" [routerLink]="['/contacts/details/', contact.contactId]" routerLinkActive="router-link-active" >
+                    -
+                </td>
+
+                <td *ngIf="isAuthenticated">
+                    <i [routerLink]="['/contacts/edit/', contact.contactId]" routerLinkActive="router-link-active"  class="fa fa-pencil"></i>
+                    <i (click)="confirmDelete(contact.contactId)" class="fa fa-trash"></i>
+                </td>
+            </tr>
+    </tbody>
+</table>
+
+<div class="page-size-element">
+    <label for="pageSize">Page Size:</label>
+    <select id="pageSize" [(ngModel)]="pageSize" (change)="loadContacts(1, searchString, sortDir, showFavourites)">
+        <option [ngValue]=2 > 2 </option>
+        <option [ngValue]=4 > 4 </option>
+        <option [ngValue]=6 > 6 </option>
+        <option [ngValue]=8 > 8 </option>
+        <option [ngValue]=10 > 10 </option>
+    </select>
+</div>
+<div *ngIf="totalPages > 1">
+    <ul class="pagination">
+        <li *ngFor="let i of [].constructor(totalPages); let index = index" class="page-item" [class.active]="page === index + 1">
+            <a class="page-link" (click)="loadContacts(index + 1, searchString, sortDir, showFavourites)">{{ index + 1 }}</a>
+        </li>
+    </ul>
+</div>
+
+
+<hr>
+
+<a [routerLink]="['/contacts/add']" routerLinkActive="router-link-active" >
+    <button class="btn btn-primary" type="button">
+        Add Contact
+    </button>
+</a>

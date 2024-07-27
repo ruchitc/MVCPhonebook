@@ -1,0 +1,81 @@
+#searchbox {
+    float: right;
+    margin-top: 8px;
+    height: 40px;
+    width: 250px;
+    padding-inline: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 4px;
+}
+
+tbody {
+    text-align: center;
+    vertical-align: middle;
+}
+
+thead {
+    text-align: center;
+}
+
+.employee-item:hover {
+    filter: brightness(85%);
+    cursor: pointer;
+}
+
+.pagination {
+    justify-content: center;
+}
+
+.page-size-element {
+    float: right;
+}
+
+.filter {
+    max-width: fit-content;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.btn {
+    margin-inline: 3px;
+}
+
+.table-row-star {
+    margin-left: 20px;
+    color: gold;
+}
+
+.fa-star {
+    display: inline;
+    cursor: pointer;
+}
+
+.fa-regular {
+    color: black;
+}
+
+.fa-star:hover {
+    color:rgb(255, 241, 87);
+}
+
+.fa-pencil {
+    cursor: pointer;
+}
+
+.fa-pencil:hover {
+    color: dodgerblue;
+}
+
+.fa-trash {
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+.fa-trash:hover {
+    color: red;
+}
+
+.fa-sort, .fa-sort-asc, .fa-sort-desc {
+    margin-left: 2px;
+}

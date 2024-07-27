@@ -1,0 +1,147 @@
+<div>
+  <div class="position-relative">
+    <div *ngIf="loading" class="loader-overlay">
+      <img src="assets/loaderImage.gif" class="loader-overlay" alt="loading" />
+    </div>
+    <div class="row justify-content-center container">
+        <h2 class="row justify-content-center">Sign Up</h2>
+        <div class="col-md-6 form-wrapper">
+          <form #signUpForm="ngForm" class="needs-validation" (ngSubmit)="onSubmit(signUpForm)" novalidate>
+            <div class="row mb-3">
+              <div class="col md-6">
+                <label class="form-label" for="firstName">First Name:</label>
+                <input type="text" class="form-control" id="firstName" name="firstName" [(ngModel)]="user.firstName"
+                  required minlength="2">
+                <div *ngIf="signUpForm.controls['firstName']?.invalid && signUpForm.controls['firstName']?.touched">
+                  <small class="text-danger" *ngIf="signUpForm.controls['firstName']?.errors?.['required']">First name is
+                    required.</small>
+                  <small class="text-danger" *ngIf="signUpForm.controls['firstName']?.errors?.['minlength']">First name must
+                    be at least 2 characters long.</small>
+                </div>
+              </div>
+              <div class="col md-6">
+                <label class="form-label" for="lastName">Last Name:</label>
+                <input type="text" class="form-control" id="lastName" name="lastName" [(ngModel)]="user.lastName" required
+                  minlength="2">
+                <div *ngIf="signUpForm.controls['lastName']?.invalid && signUpForm.controls['lastName']?.touched">
+                  <small class="text-danger" *ngIf="signUpForm.controls['lastName']?.errors?.['required']">Last name is
+                    required.</small>
+                  <small class="text-danger" *ngIf="signUpForm.controls['lastName']?.errors?.['minlength']">Last name must
+                    be at least 2 characters long.</small>
+                </div>
+              </div>
+
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="loginId">Login Id:</label>
+              <input type="text" class="form-control" id="loginId" name="loginId" [(ngModel)]="user.loginId" required
+                minlength="2">
+              <div *ngIf="signUpForm.controls['loginId']?.invalid && signUpForm.controls['loginId']?.touched">
+                <small class="text-danger" *ngIf="signUpForm.controls['loginId']?.errors?.['required']">Login id is
+                  required.</small>
+                <small class="text-danger" *ngIf="signUpForm.controls['loginId']?.errors?.['minlength']">Login id must be
+                  at least 2 characters long.</small>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="email">Email:</label>
+              <input type="email" class="form-control" id="email" name="email" [(ngModel)]="user.email" required email>
+              <div *ngIf="signUpForm.controls['email']?.invalid && signUpForm.controls['email']?.touched">
+                <small class="text-danger" *ngIf="signUpForm.controls['email']?.errors?.['required']">Email is
+                  required.</small>
+                <small class="text-danger" *ngIf="signUpForm.controls['email']?.errors?.['email']">Invalid email
+                  format.</small>
+              </div>
+            </div>
+            <div class="row mb-3">
+
+              <div class="col md-6">
+                <label for="password" class="form-label">Password:</label>
+                <input type="password" id="password" name="password" class="form-control" [(ngModel)]="user.password"
+                  required minlength="8" pattern="^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&].{8,}$">
+                <div *ngIf="signUpForm.controls['password']?.invalid && signUpForm.controls['password']?.touched">
+                  <small class="text-danger" *ngIf="signUpForm.controls['password']?.errors?.['required']">Password is
+                    required.</small>
+                  <small class="text-danger" *ngIf="signUpForm.controls['password']?.errors?.['minlength']">Password must be
+                    at least 8 characters long.</small>
+                  <small class="text-danger" *ngIf="signUpForm.controls['password']?.errors?.['pattern']">Password must be
+                    alphanumeric and contain at least one special character.</small>
+                </div>
+              </div>
+              <div class="col md-6">
+                <label for="confirmPassword" class="form-label">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
+                  [(ngModel)]="user.confirmPassword" (input)="checkPasswords(signUpForm)" required>
+                <div
+                  *ngIf="signUpForm.controls['confirmPassword']?.invalid && signUpForm.controls['confirmPassword']?.touched">
+                  <small class="text-danger" *ngIf="signUpForm.controls['confirmPassword']?.errors?.['required']">Confirm
+                    password is required.</small>
+                  <small class="text-danger"
+                    *ngIf="signUpForm.controls['confirmPassword']?.errors?.['passwordMismatch']">Passwords do not
+                    match.</small>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="contactNumber">Contact Number:</label>
+              <input type="text" class="form-control" id="contactNumber" name="contactNumber"
+                [(ngModel)]="user.contactNumber" required pattern="^\+?\d{10,13}$">
+              <div *ngIf="signUpForm.controls['contactNumber']?.invalid && signUpForm.controls['contactNumber']?.touched">
+                <small class="text-danger" *ngIf="signUpForm.controls['contactNumber']?.errors?.['required']">Contact
+                  number is required.</small>
+                <small class="text-danger" *ngIf="signUpForm.controls['contactNumber']?.errors?.['pattern']">Invalid
+                  contact number format.</small>
+              </div>
+            </div>
+            <div class="row mb-3">
+
+              <div class="col md-6">
+                <label class="form-label" for="securityQuestionId_1">Security Quesion 1</label>
+                <select id="securityQuestionId_1" name="securityQuestionId_1" class="form-control" [(ngModel)]="user.securityQuestionId_1" required>
+                    <option [value]=0 selected="true" disabled="disabled">-- Select Question --</option>
+                    <option *ngFor="let question of securityQuestions_1" [disabled]="user.securityQuestionId_2 == question.questionId" [value]=question.questionId>{{question.question}}</option>
+                </select>
+                <div *ngIf="(signUpForm.controls['securityQuestionId_1']?.invalid || signUpForm.controls['securityQuestionId_1']?.value == 0) && signUpForm.controls['securityQuestionId_1']?.touched">
+                    <small class="text-danger">Security question is required.</small>
+                </div>
+            </div>
+            <div class="col md-6">
+              <label class="form-label" for="securityAnswer_1">Answer:</label>
+              <input type="text" class="form-control" id="securityAnswer_1" name="securityAnswer_1" [(ngModel)]="user.securityAnswer_1"
+                required>
+              <div *ngIf="signUpForm.controls['securityAnswer_1']?.invalid && signUpForm.controls['securityAnswer_1']?.touched">
+                <small class="text-danger" *ngIf="signUpForm.controls['securityAnswer_1']?.errors?.['securityAnswer_1']">Answer is
+                  required.</small>
+              </div>
+            </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col md-6">
+                <label class="form-label" for="securityQuestionId_2">Security Quesion 2</label>
+                <select id="securityQuestionId_2" name="securityQuestionId_2" class="form-control" [(ngModel)]="user.securityQuestionId_2" required>
+                    <option [value]=0 selected="true" disabled="disabled">-- Select Question --</option>
+                    <option *ngFor="let question of securityQuestions_2" [disabled]="user.securityQuestionId_1 == question.questionId" [value]=question.questionId>{{question.question}}</option>
+                </select>
+                <div *ngIf="(signUpForm.controls['securityQuestionId_2']?.invalid || signUpForm.controls['securityQuestionId_2']?.value == 0) && signUpForm.controls['securityQuestionId_2']?.touched">
+                    <small class="text-danger">Security question is required.</small>
+                </div>
+            </div>
+            <div class="col md-6">
+              <label class="form-label" for="securityAnswer_2">Answer:</label>
+              <input type="text" class="form-control" id="securityAnswer_2" name="securityAnswer_2" [(ngModel)]="user.securityAnswer_2"
+                required>
+              <div *ngIf="signUpForm.controls['securityAnswer_2']?.invalid && signUpForm.controls['securityAnswer_2']?.touched">
+                <small class="text-danger" *ngIf="signUpForm.controls['securityAnswer_2']?.errors?.['securityAnswer_2']">Answer is
+                  required.</small>
+              </div>
+            </div>
+
+            </div>
+            <button style="margin-top: 20px" type="submit" class="btn btn-primary" [disabled]="signUpForm.invalid">Submit</button>
+          </form>
+          <a style="float:right; margin-top: 10px" [routerLink]="['/signin']" routerLinkActive="router-link-active">Already have an account?</a>
+
+        </div>
+      </div>
+    </div>
+  </div>

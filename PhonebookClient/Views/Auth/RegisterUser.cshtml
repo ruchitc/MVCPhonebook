@@ -1,0 +1,144 @@
+﻿@using PhonebookClient.ViewModels
+@model RegisterViewModel
+
+
+<div class="row justify-content-center">
+    <h1 class="row justify-content-center">Register User</h1>
+    <div class="form-wrapper">
+
+<form asp-action="RegisterUser" method="post">
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="row mb-3">
+    <div class="col md-6 form-group">
+        <label asp-for="FirstName" class="control-label"></label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div class="col md-6 form-group">
+        <label asp-for="LastName" class="control-label"></label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+
+    </div>
+    <div class="form-group">
+        <label asp-for="ContactNumber" class="control-label"></label>
+        <input asp-for="ContactNumber" class="form-control" />
+        <span asp-validation-for="ContactNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LoginId" class="control-label"></label>
+        <input asp-for="LoginId" class="form-control" />
+        <span asp-validation-for="LoginId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+            <div class="row mb-3">
+                <div class="col md-6 form-group">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="col md-6 form-group">
+                    <label asp-for="ConfirmPassword" class="control-label"></label>
+                    <input asp-for="ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="row mb-3">
+                <div class="col md-6 form-group">
+                    <label asp-for="SecurityQuestionId_1" class="control-label">Security question 1:</label>
+                    <select asp-for="SecurityQuestionId_1" class="form-control" asp-items="@(new SelectList(ViewBag.SecurityQuestions, "QuestionId", "Question"))">
+                        <option selected="true" disabled="disabled" value="">-- Select security question 1 --</option>
+                    </select>
+                    <span asp-validation-for="SecurityQuestionId_1" class="text-danger"></span>
+                </div>
+                <div class="col md-6 form-group">
+                    <label asp-for="SecurityAnswer_1" class="control-label"></label>
+                    <input asp-for="SecurityAnswer_1" class="form-control" />
+                    <span asp-validation-for="SecurityAnswer_1" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <div class="row mb-3">
+                <div class="col md-6 form-group">
+                    <label asp-for="SecurityQuestionId_2" class="control-label">Security question 1:</label>
+                    <select asp-for="SecurityQuestionId_2" class="form-control" asp-items="@(new SelectList(ViewBag.SecurityQuestions, "QuestionId", "Question"))">
+                        <option selected="true" disabled="disabled" value="">-- Select security question 2 --</option>
+                    </select>
+                    <span asp-validation-for="SecurityQuestionId_2" class="text-danger"></span>
+                </div>
+                <div class="col md-6 form-group">
+                    <label asp-for="SecurityAnswer_2" class="control-label"></label>
+                    <input asp-for="SecurityAnswer_2" class="form-control" />
+                    <span asp-validation-for="SecurityAnswer_2" class="text-danger"></span>
+                </div>
+
+            </div>
+
+        <input type="submit" value="Submit" class="btn btn-primary" />
+
+</form>
+        <a class="row justify-content-center" style="margin-top: 10px" asp-action="LoginUser" asp-controller="Auth">Already have an account?</a>
+    </div>
+</div>
+
+<style>
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .form-wrapper {
+        width: 100%;
+        width: 700px;
+        background-color: #f7f7f7;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#SecurityQuestionId_1').change(function () {
+            var selectedValue = $(this).val();
+            $('#SecurityQuestionId_2 option').each(function () {
+                if ($(this).val() === selectedValue || $(this).val() == "") {
+                    $(this).attr('disabled', 'disabled');
+                } else {
+                    $(this).removeAttr('disabled');
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $('#SecurityQuestionId_2').change(function () {
+            var selectedValue = $(this).val();
+            $('#SecurityQuestionId_1 option').each(function () {
+                if ($(this).val() === selectedValue || $(this).val() == "") {
+                    $(this).attr('disabled', 'disabled');
+                } else {
+                    $(this).removeAttr('disabled');
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,54 @@
+﻿@using PhonebookClient.ViewModels
+@model LoginViewModel
+
+
+<div class="row justify-content-center container">
+        <h1 class="row justify-content-center">Login</h1>
+    <div class="form-wrapper">
+
+<form asp-action="LoginUser" method="post">
+
+    <div class="form-group">
+        <label asp-for="Username" class="control-label"></label>
+        <input asp-for="Username" class="form-control" />
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Password" class="control-label"></label>
+        <input asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+        <input style="margin-top: 20px;" type="submit" value="Submit" class="btn btn-primary" />
+
+</form>
+        <a style="margin-top: 10px;" asp-action="RegisterUser" asp-controller="Auth">New User?</a>
+            <a style="float: right;" asp-action="ForgotPassword">Forgot password?</a>
+    </div>
+</div>
+
+        <style>
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .form-wrapper {
+        width: 100%;
+        width: 700px;
+        background-color: #f7f7f7;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+        </style>
